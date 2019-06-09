@@ -1,0 +1,32 @@
+.title {
+    margin-top: 2em;
+    img {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+.main-card {
+    margin: 2em auto;
+    max-width: 600px;
+    height: 200px;
+    div {
+        height: 100%;
+        font-size: 18px;
+    }
+}
+
+.mat-card-header-text {
+    margin: 0 0 0 0 !important;
+}
+
+.action {
+    display: flex
+}
+
+.align-center {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
