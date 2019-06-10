@@ -5,6 +5,6 @@ const apiController = require(path.join(__dirname, '../api-controllers/api-contr
 
 router.get('/get-pets', apiController.getPets);
 
-router.post('/like-pet', apiController.likePet);
+router.post('/add-pet', apiController.addPet);
 
 module.exports = router;

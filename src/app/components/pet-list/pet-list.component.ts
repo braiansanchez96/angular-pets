@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable } from '@angular/material/table';
+import { PetService } from 'src/app/service/pet.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Pet } from 'src/app/shared/pet';
 
 @Component({
   selector: 'app-pet-list',
@@ -9,29 +12,51 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class PetListComponent implements OnInit {
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  
-  arr = [
-    { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-    { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-    { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-    { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-    { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-    { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-    { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-    { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-    { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-    { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' }
-  ];
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  selectedIndex: number = 0;
 
-  dataSource = new MatTableDataSource<any>(this.arr);
+  petForm: FormGroup;
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  
-  constructor() { }
+  petsArray: Pet[] = [];
+
+  displayedColumns: string[] = ['id', 'owner', 'name', 'age', 'type'];
+
+  constructor(private petService: PetService) { }
 
   ngOnInit() {
-    this.dataSource.paginator = this.paginator;
+    this.petForm = new FormGroup({
+      'owner': new FormControl('', Validators.required),
+      'name': new FormControl('', Validators.required),
+      'age': new FormControl('', [Validators.required, Validators.min(1)]),
+      'photo': new FormControl('', Validators.required),
+      'type': new FormControl('', Validators.required)
+    });
+
+    this.getPets();
+  }
+
+  getPets() {
+    this.petService.getPets().subscribe(res => {
+      this.petsArray = res;
+    });
+  }
+
+  addPet() {
+    console.log(this.petForm.value);
+    this.petService.addPet({
+      "owner": this.petForm.value.owner,
+      "name": this.petForm.value.name,
+      "age": this.petForm.value.age,
+      "photo": this.petForm.value.photo,
+      "type": this.petForm.value.type
+    }).subscribe(res => {
+      this.petForm.reset();
+      this.selectedIndex = 0;
+      this.getPets();
+    },
+      err => {
+        console.log(err);
+      })
   }
 
 }

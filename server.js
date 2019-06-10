@@ -5,8 +5,6 @@ const apiRoute = require(path.join(__dirname, '/api-routes/api-route'));
 
 const pool = require(path.join(__dirname, '/db-config/db'));
 
-const apiRoute = require(__dirname + '/api-routes/api-routes');
-
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
